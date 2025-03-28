@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mejora Continua</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .video-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .video-item {
+            width: 200px;
+            text-align: center;
+            cursor: grab;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .delete-box {
+            width: 100%;
+            height: 100px;
+            background: #ffdddd;
+            text-align: center;
+            line-height: 100px;
+            border: 2px dashed red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button id="logout-button" onclick="logout()">Cerrar Sesión</button>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Inicio</a></li>
+            <li><a href="index.html">Capacitaciones</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Mejora Continua</h1>
+        <a href="index.html" class="back-arrow">&#8592;</a>
+
+        <div class="youtube-upload" id="youtube-section" style="display: none;">
+            <h3>Agregar Video de YouTube</h3>
+            <input type="text" id="youtubeInput" placeholder="Pega el enlace de YouTube aquí">
+            <button onclick="addYoutubeVideo()">Añadir Video</button>
+        </div>
+
+        <div class="video-gallery" id="youtube-list"></div>
+        
+        <div class="delete-box" id="delete-box" style="display: none;">Arrastra aquí para eliminar</div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM completamente cargado");
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            let youtubeSection = document.getElementById("youtube-section");
+            let deleteBox = document.getElementById("delete-box");
+
+            if (user.role === "admin") {
+                if (youtubeSection) youtubeSection.style.display = "block"; 
+                if (deleteBox) deleteBox.style.display = "block";
+            } else {
+                if (deleteBox) deleteBox.style.display = "none";
+            }
+
+            loadYoutubeVideos();
+        });
+
+        function addYoutubeVideo() {
+            let input = document.getElementById("youtubeInput").value.trim();
+            let videoId = getYoutubeVideoId(input);
+            if (!videoId) {
+                alert("Por favor ingresa un enlace válido de YouTube.");
+                return;
+            }
+            let videos = JSON.parse(localStorage.getItem("youtubeVideos")) || [];
+            if (videos.some(v => v.id === videoId)) {
+                alert("Este video ya está en la lista.");
+                return;
+            }
+            fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=AIzaSyCRGGlR5-JDR443twwGAPCyMIyimQHz7io&part=snippet`)
+                .then(response => response.json())
+                .then(data => {
+                    let videoTitle = (data.items && data.items.length > 0) 
+                        ? data.items[0].snippet.title 
+                        : "Título no disponible";
+                    let videoUrl = `https://youtu.be/${videoId}`;
+                    let newVideo = { id: videoId, title: videoTitle, url: videoUrl };
+                    videos.push(newVideo);
+                    localStorage.setItem("youtubeVideos", JSON.stringify(videos));
+                    loadYoutubeVideos();
+                    document.getElementById("youtubeInput").value = "";
+                })
+                .catch(error => {
+                    console.error("Error obteniendo el título:", error);
+                    let videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                    let newVideo = { id: videoId, title: `Video ${videoId}`, url: videoUrl };
+                    videos.push(newVideo);
+                    localStorage.setItem("youtubeVideos", JSON.stringify(videos));
+                    loadYoutubeVideos();
+                });
+        }
+
+        function getYoutubeVideoId(url) {
+            let match = url.match(/(?:youtube\.com\/(?:.*[?&]v=|v\/|e\/|.*[?&]vi=)|youtu\.be\/|youtube\.com\/embed\/)([^"&?\/\s]{11})/);
+            return match ? match[1] : null;
+        }
+
+        function loadYoutubeVideos() {
+            let videoContainer = document.getElementById("youtube-list");
+            if (!videoContainer) return;
+            let videos = JSON.parse(localStorage.getItem("youtubeVideos")) || [];
+            videoContainer.innerHTML = "";
+            videos.forEach(video => {
+                let videoElement = document.createElement("div");
+                videoElement.classList.add("video-item");
+                videoElement.draggable = true;
+                videoElement.dataset.id = video.id;
+                videoElement.innerHTML = `
+                    <p>${video.title}</p>
+                    <a href="${video.url}" target="_blank">
+                        <img src="https://img.youtube.com/vi/${video.id}/0.jpg" width="200">
+                    </a>
+                `;
+                videoElement.addEventListener("dragstart", function(event) {
+                    event.dataTransfer.setData("text", video.id);
+                });
+                videoContainer.appendChild(videoElement);
+            });
+        }
+
+        document.getElementById("delete-box").addEventListener("dragover", function(event) {
+            event.preventDefault();
+        });
+
+        document.getElementById("delete-box").addEventListener("drop", function(event) {
+            event.preventDefault();
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+            if (user.role !== "admin") {
+                alert("No tienes permisos para eliminar videos.");
+                return;
+            }
+
+            let videoId = event.dataTransfer.getData("text");
+            deleteYoutubeVideo(videoId);
+        });
+
+        function deleteYoutubeVideo(videoId) {
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+            if (user.role !== "admin") {
+                alert("No tienes permisos para eliminar videos.");
+                return;
+            }
+
+            let videos = JSON.parse(localStorage.getItem("youtubeVideos")) || [];
+            videos = videos.filter(video => video.id !== videoId);
+            localStorage.setItem("youtubeVideos", JSON.stringify(videos));
+            loadYoutubeVideos();
+        }
+
+        function logout() {
+            localStorage.removeItem("user");
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+</html>

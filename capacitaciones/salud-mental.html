@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salud Mental</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Salud Mental</h1>
+        <a href="index.html" class="btn">Volver a Capacitaciones</a>
+
+        <div class="upload-section" id="upload-section">
+            <h2>Subir Video</h2>
+            <input type="file" id="videoUpload" accept="video/*">
+            <button onclick="uploadVideo()">Subir</button>
+        </div>
+
+        <div class="video-gallery">
+            <h2>Videos Disponibles</h2>
+            <div id="videos"></div>
+        </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script>
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        if (!user || user.role !== "admin") {
+            document.getElementById("upload-section").style.display = "none"; // Oculta la opción de subir videos si no es admin
+        }
+    </script>    
+</body>
+</html>

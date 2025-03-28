@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositorio Empresarial</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Scripts JS -->
+    <script src="js/auth.js" defer></script>
+    <script src="js/script.js" defer></script>
+
+    <style>
+        /* 🔹 Estilos para el título */
+        .custom-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            font-family: 'Poppins', sans-serif;
+            color: #0A3D62;
+            margin: 20px 0;
+        }
+
+        /* 🔹 Línea separadora debajo de los logos */
+        .separator {
+            width: 90%;
+            height: 2px;
+            background-color: #FFD1DC;
+            margin: 10px auto 30px auto;
+        }
+
+        /* 🔹 Estilos para el buscador */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .search-container input {
+            width: 250px;
+            padding: 8px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-container button {
+            padding: 8px 12px;
+            border: none;
+            background-color: #0A3D62;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+            transition: background 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #07456F;
+        }
+
+        /* 🔹 Pie de página corregido */
+        footer {
+            background-color: #FFD1DC; 
+            color: black;
+            text-align: center;
+            padding: 15px;
+            width: 100%;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sección de Logos -->
+    <div class="logos">
+        <img src="img/logo1.png" alt="Logo 1">
+        <img src="img/logo2.png" alt="Logo 2">
+        <img src="img/logo3.png" alt="Logo 3">
+    </div>
+
+    <!-- Línea separadora -->
+    <div class="separator"></div>
+
+    <!-- 🔹 Título principal -->
+    <h2 class="custom-title" id="welcome-title">¡Este espacio fue creado para tu conocimiento!</h2>
+
+    <!-- 🔹 Buscador -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar una categoría...">
+        <button onclick="search()">🔍</button>
+    </div>
+
+    <!-- 🔹 Sección de hipervínculos con imágenes -->
+    <div class="menu-container">
+        <div class="menu-item">
+            <a href="capacitaciones/index.html">
+                <img src="img/capacitaciones.jpg" alt="Capacitaciones">
+                <p>Capacitaciones</p>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="sgsst.html">
+                <img src="img/sgsst.jpg" alt="SGSST">
+                <p>Sistema de Gestión de Seguridad y Salud</p>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="sgc.html">
+                <img src="img/sgc.jpg" alt="SGC">
+                <p>Sistema de Gestión de Calidad</p>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="documentos.html">
+                <img src="img/documentos.jpg" alt="Documentos">
+                <p>Sistema de Gestión Documental</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- 🔹 Botón de cerrar sesión -->
+    <button id="logout-button" onclick="logout()">Cerrar Sesión</button>
+
+    <!-- 🔹 Pie de página -->
+    <footer>
+        <p><strong>Surtidora Panty Jeans de Colombia SAS</strong></p>
+        <p>CR 3 #15 90-94 Barrio CENTRO</p>
+        <p>Teléfono: 3148592448</p>
+        <p><a href="http://pantyjeans.com" target="_blank" style="color: rgb(0, 0, 0);">pantyjeans.com</a></p>
+        <p>Instagram: <a href="https://www.instagram.com/pantyjeans" target="_blank" style="color: rgb(0, 0, 0);">@pantyjeans</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let title = document.getElementById("welcome-title");
+            if (title) {
+                title.style.opacity = "0";
+                title.style.transform = "translateY(-20px)";
+                setTimeout(() => {
+                    title.style.transition = "opacity 1.5s ease-out, transform 1.5s ease-out";
+                    title.style.opacity = "1";
+                    title.style.transform = "translateY(0)";
+                }, 200);
+            }
+        });
+
+        function search() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let items = document.querySelectorAll(".menu-item");
+            
+            items.forEach(item => {
+                let text = item.textContent.toLowerCase();
+                item.style.display = text.includes(input) ? "block" : "none";
+            });
+        }
+    </script>
+
+</body>
+</html>

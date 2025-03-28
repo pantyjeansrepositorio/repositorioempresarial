@@ -1,0 +1,1128 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e2f;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin-top: 10%;
+}
+
+h1 {
+    font-size: 2.5em;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInAnimation 1.5s ease-out forwards;
+}
+
+/* Animación Fade-in */
+@keyframes fadeInAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.buttons {
+    margin-top: 30px;
+}
+
+.btn {
+    display: block;
+    margin: 15px auto;
+    padding: 15px 30px;
+    width: 250px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.upload-section {
+    margin-top: 20px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.video-gallery {
+    margin-top: 30px;
+}
+
+.video-wrapper {
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #2a2a3b;
+    border-radius: 10px;
+    width: 320px;
+    text-align: center;
+}
+
+.video-wrapper button {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block;
+    width: 100%;
+}
+
+.video-wrapper button:hover {
+    background-color: #c82333;
+}
+
+.login-container {
+    width: 300px;
+    margin: 10% auto;
+    padding: 20px;
+    background-color: #2a2a3b;
+    border-radius: 10px;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+button {
+    width: auto;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    border-radius: 5px;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+}
+
+#logout-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+#logout-button:hover {
+    background-color: #cc0000;
+}
+
+nav {
+    background-color: #2c3e50;
+    padding: 15px;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    background-color: #34495e;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #1abc9c;
+}
+
+.folders {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.folder {
+    display: block;
+    background-color: #f39c12;
+    padding: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    text-align: center;
+    width: 200px;
+    transition: 0.3s;
+}
+
+.folder:hover {
+    background-color: #e67e22;
+}
+
+/* Estilo de los Logos */
+.logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; /* Reduce más el espacio entre logos */
+    padding: 10px 0;
+}
+
+.logos img {
+    height: 50px; /* Ajusta el tamaño de los logos si es necesario */
+    width: auto;
+}
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    white-space: nowrap;
+    z-index: 10;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav ul li {
+    position: relative;
+    display: inline-block;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    background-color: #34495e;
+    border-radius: 5px;
+    transition: 0.3s;
+    display: block;
+}
+
+nav ul li a:hover {
+    background-color: #ffdddd;
+}
+
+/* Submenú */
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(44, 62, 80, 0.9); /* Fondo semitransparente */
+    padding: 10px 0;
+    border-radius: 5px;
+    min-width: 200px;
+}
+
+.submenu li {
+    display: block;
+    text-align: left;
+}
+
+.submenu li a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.submenu li a:hover {
+    background-color: #1abc9c;
+}
+
+/* Mostrar el submenú cuando el usuario pasa el cursor */
+.menu-item:hover .submenu {
+    display: block;
+}
+.back-arrow {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 32px;
+    color: rgba(255, 255, 255, 0.8); /* Color blanco con transparencia */
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background 0.3s ease-in-out;
+}
+
+.back-arrow:hover {
+    background: rgba(255, 255, 255, 0.2); /* Fondo ligeramente visible al pasar el mouse */
+    color: white;
+}
+/* Estilos del carrusel */
+.carousel {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-images {
+    display: flex;
+    width: 300%;
+    animation: slide 9s infinite;
+}
+
+.carousel img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+@keyframes slide {
+    0%, 33% { transform: translateX(0); }
+    34%, 66% { transform: translateX(-100%); }
+    67%, 100% { transform: translateX(-200%); }
+}
+
+/* Colores del repositorio */
+body {
+    background-color: white;
+}
+
+nav {
+    background-color: #cf3476;
+    padding: 15px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+}
+
+nav ul li {
+    position: relative;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.menu-item:hover .submenu {
+    display: block;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    background-color: #cf3476;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.submenu li a {
+    color: white;
+    padding: 5px;
+}
+
+/* Botones transparentosos */
+button {
+    background: rgba(128, 128, 128, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: rgba(128, 128, 128, 0.8);
+}
+/* Contenedor de logos */
+.logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: white;
+}
+
+.logos img {
+    height: 80px; /* Ajusta el tamaño según sea necesario */
+    margin: 0 15px;
+}
+
+/* Menú de navegación */
+nav {
+    background-color: #cf3476;
+    padding: 15px;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    position: relative;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Carrusel */
+.carousel {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-images {
+    display: flex;
+    width: 300%;
+    animation: slide 9s infinite;
+}
+
+.carousel img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+@keyframes slide {
+    0%, 33% { transform: translateX(0); }
+    34%, 66% { transform: translateX(-100%); }
+    67%, 100% { transform: translateX(-200%); }
+}
+.carousel {
+    width: 100%;
+    height: 500px; /* Ajusta según la altura de las imágenes */
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-images {
+    display: flex;
+    width: 300%; /* 3 imágenes */
+    transition: transform 1s ease-in-out;
+}
+
+.carousel-images img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    flex: 1;
+}
+/* --- CARRUSEL --- */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Ajusta según el tamaño de tus imágenes */
+    overflow: hidden;
+}
+
+.carousel-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.carousel-images img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.carousel-images img:first-child {
+    opacity: 1; /* La primera imagen es visible al inicio */
+}
+
+/* --- MENÚ ENCIMA DEL CARRUSEL --- */
+nav {
+    position: relative;
+    z-index: 1000; /* Asegura que el menú esté por encima de todo */
+}
+
+/* Si el menú tiene un dropdown */
+nav ul {
+    position: relative;
+    z-index: 1001;
+}
+.carousel {
+    position: relative;
+    width: 100%;
+    max-width: 800px; /* Ajusta el ancho según tu diseño */
+    height: 400px; /* Ajusta la altura según tu diseño */
+    overflow: hidden;
+}
+
+.carousel-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-images img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen llene el espacio sin espacios en blanco */
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.carousel-images img.active {
+    opacity: 1;
+}
+/* 🔹 Estilos del carrusel */
+.carousel {
+    position: relative;
+    width: 1920px; /* Ancho fijo */
+    height: 600px; /* Alto fijo */
+    overflow: hidden;
+    margin: auto; /* Centrar el carrusel */
+}
+
+.carousel-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-images img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen sin deformarla */
+    opacity: 0;
+    transition: opacity 1s ease-in-out; /* Transición de fade */
+}
+
+.carousel-images img:first-child {
+    opacity: 1; /* La primera imagen aparece primero */
+}
+/* 🔹 Estilos del carrusel */
+.carousel {
+    position: relative;
+    width: 1920px; /* Ancho fijo */
+    height: 600px; /* Alto fijo */
+    overflow: hidden;
+    margin: auto; /* Centrar el carrusel */
+}
+
+.carousel-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-images img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen sin deformarla */
+    opacity: 0;
+    transition: opacity 1s ease-in-out; /* Transición de fade */
+}
+
+.carousel-images img:first-child {
+    opacity: 1; /* La primera imagen aparece primero */
+}
+/* 🔹 Estilos del carrusel */
+.carousel {
+    position: relative;
+    width: 100%;
+    max-width: 1920px;
+    height: 600px;
+    overflow: hidden;
+    margin: auto;
+}
+
+.carousel-images {
+    display: flex;
+    width: 300%; /* Ajustado para contener las imágenes */
+    height: 100%;
+    transition: transform 1s ease-in-out;
+}
+/* 🔹 Estilos para el carrusel */
+.carousel-images img {
+    width: 100%;
+    height: auto; /* Evita distorsión */
+    object-fit: cover;
+}
+
+/* 🔹 Estilos para la imagen fija con mensaje */
+.banner {
+    position: relative;
+    width: 100%;
+    max-height: 500px; /* Altura ajustada */
+    overflow: hidden;
+}
+
+.banner img {
+    width: 100%;
+    height: auto; /* Mantiene proporciones */
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.banner-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #0A3D62; /* Azul oscuro */
+    font-size: 28px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+/* 🔹 Estilos para el menú principal */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    background-color: #0A3D62; /* Azul oscuro */
+}
+
+nav ul li {
+    position: relative;
+    padding: 15px 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+}
+
+/* 🔹 Estilos para el submenú (inicialmente oculto) */
+nav ul .submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #0A3D62;
+    padding: 0;
+    min-width: 200px;
+    z-index: 100;
+}
+
+/* 🔹 Mostrar el submenú cuando el cursor pase sobre la opción */
+nav ul li:hover .submenu {
+    display: block;
+}
+
+/* 🔹 Estilos para los elementos del submenú */
+nav ul .submenu li {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+nav ul .submenu li a {
+    color: white;
+    font-size: 16px;
+}
+
+/* 🔹 Evitar que el submenú desaparezca bruscamente */
+nav ul .submenu li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+/* 🔹 Estilos para el menú principal */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    background: transparent; /* Fondo transparente */
+}
+
+nav ul li {
+    position: relative;
+    padding: 15px 20px;
+}
+
+nav ul li a {
+    color: black; /* Letras en negro */
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+}
+
+/* 🔹 Estilos para el submenú (inicialmente oculto) */
+nav ul .submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(255, 255, 255, 0.9); /* Fondo casi transparente */
+    padding: 0;
+    min-width: 200px;
+    z-index: 100;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+/* 🔹 Mostrar el submenú cuando el cursor pase sobre la opción */
+nav ul li:hover .submenu {
+    display: block;
+}
+
+/* 🔹 Estilos para los elementos del submenú */
+nav ul .submenu li {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+nav ul .submenu li a {
+    color: black; /* Texto en negro */
+    font-size: 16px;
+}
+
+/* 🔹 Efecto al pasar el mouse sobre los elementos del submenú */
+nav ul .submenu li:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+/* 🔹 Estilos para el menú principal */
+nav {
+    background: transparent; /* Menú sin fondo */
+    padding: 10px 0;
+}
+
+/* 🔹 Estilos para los elementos del menú */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Centra los elementos */
+}
+
+nav ul li {
+    position: relative;
+    padding: 15px 20px;
+}
+
+/* 🔹 Estilos para los enlaces del menú */
+nav ul li a {
+    color: black; /* Letras en negro */
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    padding: 10px 15px;
+    transition: color 0.3s ease-in-out;
+    background: none; /* 🔥 Sin fondo */
+}
+
+/* 🔹 Eliminar cualquier fondo en los elementos del menú */
+nav ul li {
+    background: none !important; /* 🔥 Sin fondo */
+}
+
+/* 🔹 Estilos para el submenú (inicialmente oculto) */
+nav ul .submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(255, 255, 255, 0.95); /* Fondo blanco casi transparente */
+    padding: 0;
+    min-width: 200px;
+    z-index: 100;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* 🔹 Mostrar el submenú cuando el cursor pase sobre la opción */
+nav ul li:hover .submenu {
+    display: block;
+}
+
+/* 🔹 Estilos para los elementos del submenú */
+nav ul .submenu li {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: none; /* 🔥 Sin fondo */
+}
+
+/* 🔹 Cambia el color de los enlaces del submenú */
+nav ul .submenu li a {
+    color: black;
+    font-size: 16px;
+}
+
+/* 🔹 Efecto hover en el submenú */
+nav ul .submenu li:hover {
+    background-color: rgba(214, 0, 125, 0.7); /* Magenta semi-transparente */
+    border-radius: 5px;
+}
+/* 🔹 Cambiar el color de fondo al pasar el cursor sobre los títulos del menú */
+nav ul li:hover {
+    background-color: #CF3476; /* Magenta */
+    transition: background-color 0.3s ease-in-out;
+}
+/* 🔹 Cambiar el color de fondo cuando se pasa el cursor sobre los títulos del menú */
+nav ul li.menu-item > a:hover {
+    background-color: #CF3476 !important; /* Magenta */
+    color: white !important; /* Texto blanco para contraste */
+    transition: background-color 0.3s ease-in-out;
+}
+/* 🔹 Cambiar el color de fondo cuando el cursor pasa sobre los elementos del submenú */
+nav ul li .submenu li a:hover {
+    background-color: #CF3476 !important; /* Magenta */
+    color: white !important; /* Texto blanco para contraste */
+    transition: background-color 0.3s ease-in-out;
+}
+.menu-item img {
+    width: 100px; /* Tamaño uniforme */
+    height: 100px;
+    object-fit: contain; /* Mantiene la imagen completa sin recorte */
+    border-radius: 10px; /* Esquinas redondeadas */
+    transition: transform 0.3s ease;
+}
+.header-logos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f8f8; /* Color de fondo opcional */
+}
+
+.logo {
+    max-width: 100px; /* Ajusta el tamaño de los logos */
+    height: auto;
+}
+
+.center {
+    margin: 0 auto;
+}
+.menu-item a {
+    text-decoration: none; /* Quita el subrayado */
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+
+.menu-item a p {
+    margin: 5px 0 0;
+}
+.search-container {
+    margin-bottom: 40px; /* Aumenta el espacio entre el buscador y el menú */
+}
+.menu-container {
+    margin-top: 50px; /* Más separación del buscador */
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer {
+    background-color: #FD3DB5; /* Nuevo color */
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: auto; /* Empuja el pie de página hacia abajo */
+}
+.menu-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.menu-item {
+    text-align: center;
+    width: 150px;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1;
+}
+footer {
+    background-color: #FFD1DC;  /* Color del pie de página */
+    color: black;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;  /* Letra más pequeña */
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+.upload-container {
+    width: 50%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#drop-area {
+    border: 2px dashed #0A3D62;
+    padding: 20px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+
+#drop-area:hover {
+    background-color: #e3e3e3;
+}
+
+#fileElem {
+    display: none;
+}
+
+#file-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.file-item {
+    background: #ddd;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.youtube-upload {
+    width: 50%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.youtube-upload input {
+    width: 80%;
+    padding: 8px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+.youtube-upload button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #0A3D62;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 5px;
+    transition: background 0.3s;
+}
+
+.youtube-upload button:hover {
+    background-color: #07456F;
+}
+
+.youtube-video {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.youtube-video img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.youtube-video img:hover {
+    transform: scale(1.05);
+}
+.video-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.video-item img {
+    width: 120px;
+    height: 80px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.video-item p {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+.video-wrapper {
+    background: #000000;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    margin: 10px 0;
+    text-align: center;
+    width: 320px;
+}
+
+.video-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.delete-button {
+    background: red;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delete-button:hover {
+    background: darkred;
+}
+.video-wrapper {
+    background: #ffffff; /* Fondo blanco */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    margin: 10px 0;
+    text-align: center;
+    width: 320px;
+    border: 1px solid #ddd; /* Borde gris claro */
+}
+
+.video-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000; /* Texto en negro */
+    margin-bottom: 5px;
+}
+
+.delete-button {
+    background: #ffdddd; /* Rojo claro para que resalte en fondo blanco */
+    color: #000; /* Texto negro */
+    border: 1px solid red;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delete-button:hover {
+    background: red;
+    color: white;
+}
+/* ✅ Asegurar que todos los textos sean NEGROS */
+h1, h2, h3, p, label, span {
+    color: #000 !important; /* Texto negro */
+}
+
+/* ✅ Estilos para los contenedores de videos */
+.video-wrapper {
+    background: #ffffff; /* Fondo blanco */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    margin: 10px 0;
+    text-align: center;
+    width: 320px;
+    border: 1px solid #ddd; /* Borde gris claro */
+}
+
+/* ✅ Asegurar que los títulos de los videos sean negros */
+.video-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000 !important; /* Texto negro */
+    margin-bottom: 5px;
+}
+
+/* ✅ Botón de eliminar con mejor visibilidad */
+.delete-button {
+    background: #ffdddd; /* Rojo claro */
+    color: #000; /* Texto negro */
+    border: 1px solid red;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delete-button:hover {
+    background: red;
+    color: white;
+}

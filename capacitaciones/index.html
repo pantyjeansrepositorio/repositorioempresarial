@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capacitaciones</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+    <button id="logout-button" onclick="logout()">Cerrar Sesión</button>
+
+    <!-- Barra de navegación -->
+    <nav>
+        <ul>
+            <li><a href="../index.html">Inicio</a></li>
+            <li><a href="index.html">Capacitaciones</a></li>
+            <li><a href="#">Sistema de Gestión de Seguridad y Salud</a></li>
+            <li><a href="#">Sistema de Gestión de Calidad</a></li>
+            <li><a href="#">Sistema de Gestión Documental</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Capacitaciones</h1>
+        
+        <!-- Carpetas de capacitaciones -->
+        <div class="folders">
+            <a href="mejora-continua.html" class="folder">📂 Mejora continua</a>
+            <a href="salud-mental.html" class="folder">📂 Salud mental</a>
+        </div>
+        
+
+    <script src="../js/auth.js"></script>
+    <script>
+        checkAuth();
+    </script>
+</body>
+</html>
+
