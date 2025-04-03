@@ -29,6 +29,109 @@
             margin-top: 20px;
         }
     </style>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "TU_AUTH_DOMAIN",
+            projectId: "TU_PROJECT_ID",
+            storageBucket: "TU_STORAGE_BUCKET",
+            messagingSenderId: "TU_MESSAGING_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Función para agregar video a Firestore
+        async function addYoutubeVideo() {
+            let input = document.getElementById("youtubeInput").value.trim();
+            let videoId = getYoutubeVideoId(input);
+            if (!videoId) {
+                alert("Por favor ingresa un enlace válido de YouTube.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "mejora_continua"), { id: videoId });
+                alert("Video guardado correctamente.");
+                document.getElementById("youtubeInput").value = "";
+                loadYoutubeVideos();
+            } catch (error) {
+                console.error("Error al guardar el video:", error);
+            }
+        }
+
+        // Función para cargar los videos desde Firestore
+        async function loadYoutubeVideos() {
+            const videoContainer = document.getElementById("youtube-list");
+            videoContainer.innerHTML = "";
+
+            const querySnapshot = await getDocs(collection(db, "mejora_continua"));
+            querySnapshot.forEach((doc) => {
+                const videoData = doc.data();
+                const videoId = videoData.id;
+
+                let videoElement = document.createElement("div");
+                videoElement.classList.add("video-item");
+                videoElement.draggable = true;
+                videoElement.dataset.id = doc.id;
+                videoElement.innerHTML = `
+                    <iframe width="200" height="150" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                `;
+                videoElement.addEventListener("dragstart", function(event) {
+                    event.dataTransfer.setData("text", doc.id);
+                });
+
+                videoContainer.appendChild(videoElement);
+            });
+        }
+
+        // Función para eliminar un video de Firestore
+        async function deleteYoutubeVideo(videoDocId) {
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            if (user.role !== "admin") {
+                alert("No tienes permisos para eliminar videos.");
+                return;
+            }
+
+            try {
+                await deleteDoc(doc(db, "mejora_continua", videoDocId));
+                alert("Video eliminado correctamente.");
+                loadYoutubeVideos();
+            } catch (error) {
+                console.error("Error al eliminar el video:", error);
+            }
+        }
+
+        // Detectar cuando un video es arrastrado sobre la caja de eliminación
+        document.addEventListener("DOMContentLoaded", function() {
+            const deleteBox = document.getElementById("delete-box");
+
+            deleteBox.addEventListener("dragover", function(event) {
+                event.preventDefault();
+            });
+
+            deleteBox.addEventListener("drop", function(event) {
+                event.preventDefault();
+                let videoDocId = event.dataTransfer.getData("text");
+                deleteYoutubeVideo(videoDocId);
+            });
+
+            loadYoutubeVideos();
+        });
+
+        // Extraer el ID del video de un enlace de YouTube
+        function getYoutubeVideoId(url) {
+            let match = url.match(/(?:youtube\.com\/(?:.*[?&]v=|v\/|e\/|.*[?&]vi=)|youtu\.be\/|youtube\.com\/embed\/)([^"&?\/\s]{11})/);
+            return match ? match[1] : null;
+        }
+    </script>
 </head>
 <body>
     <button id="logout-button" onclick="logout()">Cerrar Sesión</button>
@@ -57,7 +160,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            console.log("DOM completamente cargado");
             const user = JSON.parse(localStorage.getItem("user") || "{}");
             let youtubeSection = document.getElementById("youtube-section");
             let deleteBox = document.getElementById("delete-box");
@@ -68,103 +170,7 @@
             } else {
                 if (deleteBox) deleteBox.style.display = "none";
             }
-
-            loadYoutubeVideos();
         });
-
-        function addYoutubeVideo() {
-            let input = document.getElementById("youtubeInput").value.trim();
-            let videoId = getYoutubeVideoId(input);
-            if (!videoId) {
-                alert("Por favor ingresa un enlace válido de YouTube.");
-                return;
-            }
-            let videos = JSON.parse(localStorage.getItem("youtubeVideos")) || [];
-            if (videos.some(v => v.id === videoId)) {
-                alert("Este video ya está en la lista.");
-                return;
-            }
-            fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=AIzaSyCRGGlR5-JDR443twwGAPCyMIyimQHz7io&part=snippet`)
-                .then(response => response.json())
-                .then(data => {
-                    let videoTitle = (data.items && data.items.length > 0) 
-                        ? data.items[0].snippet.title 
-                        : "Título no disponible";
-                    let videoUrl = `https://youtu.be/${videoId}`;
-                    let newVideo = { id: videoId, title: videoTitle, url: videoUrl };
-                    videos.push(newVideo);
-                    localStorage.setItem("youtubeVideos", JSON.stringify(videos));
-                    loadYoutubeVideos();
-                    document.getElementById("youtubeInput").value = "";
-                })
-                .catch(error => {
-                    console.error("Error obteniendo el título:", error);
-                    let videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-                    let newVideo = { id: videoId, title: `Video ${videoId}`, url: videoUrl };
-                    videos.push(newVideo);
-                    localStorage.setItem("youtubeVideos", JSON.stringify(videos));
-                    loadYoutubeVideos();
-                });
-        }
-
-        function getYoutubeVideoId(url) {
-            let match = url.match(/(?:youtube\.com\/(?:.*[?&]v=|v\/|e\/|.*[?&]vi=)|youtu\.be\/|youtube\.com\/embed\/)([^"&?\/\s]{11})/);
-            return match ? match[1] : null;
-        }
-
-        function loadYoutubeVideos() {
-            let videoContainer = document.getElementById("youtube-list");
-            if (!videoContainer) return;
-            let videos = JSON.parse(localStorage.getItem("youtubeVideos")) || [];
-            videoContainer.innerHTML = "";
-            videos.forEach(video => {
-                let videoElement = document.createElement("div");
-                videoElement.classList.add("video-item");
-                videoElement.draggable = true;
-                videoElement.dataset.id = video.id;
-                videoElement.innerHTML = `
-                    <p>${video.title}</p>
-                    <a href="${video.url}" target="_blank">
-                        <img src="https://img.youtube.com/vi/${video.id}/0.jpg" width="200">
-                    </a>
-                `;
-                videoElement.addEventListener("dragstart", function(event) {
-                    event.dataTransfer.setData("text", video.id);
-                });
-                videoContainer.appendChild(videoElement);
-            });
-        }
-
-        document.getElementById("delete-box").addEventListener("dragover", function(event) {
-            event.preventDefault();
-        });
-
-        document.getElementById("delete-box").addEventListener("drop", function(event) {
-            event.preventDefault();
-            const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-            if (user.role !== "admin") {
-                alert("No tienes permisos para eliminar videos.");
-                return;
-            }
-
-            let videoId = event.dataTransfer.getData("text");
-            deleteYoutubeVideo(videoId);
-        });
-
-        function deleteYoutubeVideo(videoId) {
-            const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-            if (user.role !== "admin") {
-                alert("No tienes permisos para eliminar videos.");
-                return;
-            }
-
-            let videos = JSON.parse(localStorage.getItem("youtubeVideos")) || [];
-            videos = videos.filter(video => video.id !== videoId);
-            localStorage.setItem("youtubeVideos", JSON.stringify(videos));
-            loadYoutubeVideos();
-        }
 
         function logout() {
             localStorage.removeItem("user");
@@ -173,3 +179,4 @@
     </script>
 </body>
 </html>
+
