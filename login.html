@@ -15,6 +15,21 @@
         <p id="error-message" class="error-message"></p>
     </div>
 
-    <script src="js/auth.js"></script>
+    <script>
+        function login() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            let errorMessage = document.getElementById("error-message");
+
+            // Simulación de credenciales
+            if (username === "admin" && password === "1234") {
+                localStorage.setItem("isLoggedIn", "true");
+                window.location.href = "index.html"; // Redirige al inicio
+            } else {
+                errorMessage.textContent = "Usuario o contraseña incorrectos.";
+            }
+        }
+    </script>
 </body>
 </html>
+
