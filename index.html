@@ -61,26 +61,7 @@
             background-color: #07456F;
         }
 
-        /* 🔹 Estilo del botón de sesión */
-        #auth-button {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            background-color: #0A3D62;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-
-        #auth-button:hover {
-            background-color: #07456F;
-        }
-
-        /* 🔹 Pie de página */
+        /* 🔹 Pie de página corregido */
         footer {
             background-color: #FFD1DC; 
             color: black;
@@ -88,6 +69,19 @@
             padding: 15px;
             width: 100%;
             margin-top: 50px;
+        }
+
+        /* 🔹 Estilos para el botón de sesión */
+        #auth-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #0A3D62;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -140,8 +134,8 @@
         </div>
     </div>
 
-    <!-- 🔹 Botón de inicio/cierre de sesión -->
-    <button id="auth-button" onclick="toggleAuth()">Iniciar sesión</button>
+    <!-- 🔹 Botón de sesión -->
+    <button id="auth-button" onclick="handleAuth()"></button>
 
     <!-- 🔹 Pie de página -->
     <footer>
@@ -154,50 +148,23 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let title = document.getElementById("welcome-title");
             let authButton = document.getElementById("auth-button");
             let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-            // Cambia el texto del botón según el estado de sesión
             authButton.textContent = isLoggedIn ? "Cerrar sesión" : "Iniciar sesión";
 
-            if (title) {
-                title.style.opacity = "0";
-                title.style.transform = "translateY(-20px)";
-                setTimeout(() => {
-                    title.style.transition = "opacity 1.5s ease-out, transform 1.5s ease-out";
-                    title.style.opacity = "1";
-                    title.style.transform = "translateY(0)";
-                }, 200);
+            function handleAuth() {
+                if (isLoggedIn) {
+                    localStorage.setItem("isLoggedIn", "false");
+                    window.location.href = "login.html";
+                } else {
+                    window.location.href = "login.html";
+                }
             }
+            authButton.onclick = handleAuth;
         });
-
-        function toggleAuth() {
-            let authButton = document.getElementById("auth-button");
-            let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-            if (isLoggedIn) {
-                localStorage.setItem("isLoggedIn", "false");
-                authButton.textContent = "Iniciar sesión";
-                alert("Has cerrado sesión.");
-                window.location.href = "login.html"; // Redirige al login
-            } else {
-                localStorage.setItem("isLoggedIn", "true");
-                authButton.textContent = "Cerrar sesión";
-                alert("Has iniciado sesión.");
-            }
-        }
-
-        function search() {
-            let input = document.getElementById("searchInput").value.toLowerCase();
-            let items = document.querySelectorAll(".menu-item");
-            
-            items.forEach(item => {
-                let text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? "block" : "none";
-            });
-        }
     </script>
 </body>
 </html>
+
 
