@@ -17,19 +17,28 @@
 
     <script>
         function login() {
-            let username = document.getElementById("username").value;
-            let password = document.getElementById("password").value;
+            let username = document.getElementById("username").value.trim();
+            let password = document.getElementById("password").value.trim();
             let errorMessage = document.getElementById("error-message");
 
-            // Simulación de credenciales
-            if (username === "admin" && password === "1234") {
+            // Simulación de usuarios almacenados en localStorage
+            const users = {
+                "admin": "1234",
+                "usuario1": "abcd",
+                "empleado": "empleado123"
+            };
+
+            if (users[username] && users[username] === password) {
                 localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("user", username);
                 window.location.href = "index.html"; // Redirige al inicio
             } else {
                 errorMessage.textContent = "Usuario o contraseña incorrectos.";
+                errorMessage.style.color = "red";
             }
         }
     </script>
 </body>
 </html>
+
 
