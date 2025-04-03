@@ -61,7 +61,26 @@
             background-color: #07456F;
         }
 
-        /* 🔹 Pie de página corregido */
+        /* 🔹 Estilo del botón de sesión */
+        #auth-button {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #0A3D62;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        #auth-button:hover {
+            background-color: #07456F;
+        }
+
+        /* 🔹 Pie de página */
         footer {
             background-color: #FFD1DC; 
             color: black;
@@ -161,6 +180,7 @@
                 localStorage.setItem("isLoggedIn", "false");
                 authButton.textContent = "Iniciar sesión";
                 alert("Has cerrado sesión.");
+                window.location.href = "login.html"; // Redirige al login
             } else {
                 localStorage.setItem("isLoggedIn", "true");
                 authButton.textContent = "Cerrar sesión";
@@ -180,3 +200,4 @@
     </script>
 </body>
 </html>
+
