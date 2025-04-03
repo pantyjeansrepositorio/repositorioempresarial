@@ -121,8 +121,8 @@
         </div>
     </div>
 
-    <!-- 🔹 Botón de cerrar sesión -->
-    <button id="logout-button" onclick="logout()">cerrar sesión</button>
+    <!-- 🔹 Botón de inicio/cierre de sesión -->
+    <button id="auth-button" onclick="toggleAuth()">Iniciar sesión</button>
 
     <!-- 🔹 Pie de página -->
     <footer>
@@ -136,6 +136,12 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let title = document.getElementById("welcome-title");
+            let authButton = document.getElementById("auth-button");
+            let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+            // Cambia el texto del botón según el estado de sesión
+            authButton.textContent = isLoggedIn ? "Cerrar sesión" : "Iniciar sesión";
+
             if (title) {
                 title.style.opacity = "0";
                 title.style.transform = "translateY(-20px)";
@@ -147,6 +153,21 @@
             }
         });
 
+        function toggleAuth() {
+            let authButton = document.getElementById("auth-button");
+            let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+            if (isLoggedIn) {
+                localStorage.setItem("isLoggedIn", "false");
+                authButton.textContent = "Iniciar sesión";
+                alert("Has cerrado sesión.");
+            } else {
+                localStorage.setItem("isLoggedIn", "true");
+                authButton.textContent = "Cerrar sesión";
+                alert("Has iniciado sesión.");
+            }
+        }
+
         function search() {
             let input = document.getElementById("searchInput").value.toLowerCase();
             let items = document.querySelectorAll(".menu-item");
@@ -157,6 +178,5 @@
             });
         }
     </script>
-
 </body>
 </html>
