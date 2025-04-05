@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
              { username: "empleado1", password: "empleado123", role: "viewer" },
              { username: "empleado2", password: "empleado123", role: "viewer" }
          ];
-         localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("user", JSON.stringify({ username, role: users[username].role }));
      }
  });
  
