@@ -8,31 +8,29 @@ document.addEventListener("DOMContentLoaded", function () {
         category = "salud-mental";
     }
 
-    // ✅ Validar JSON válido en el localStorage antes de parsear
-    try {
-        const userRaw = localStorage.getItem("user");
+    // Solo validar si estamos en una categoría
+    if (category) {
+        try {
+            const userRaw = localStorage.getItem("user");
 
-        if (!userRaw || userRaw[0] !== "{") {
-            throw new Error("Formato inválido");
+            if (!userRaw) throw new Error("Usuario no logueado");
+
+            const user = JSON.parse(userRaw);
+
+            if (!user.username || !user.role) {
+                throw new Error("Datos de usuario incompletos");
+            }
+
+            loadVideos(category, user);
+        } catch (error) {
+            console.warn("Usuario no válido. Redirigiendo al login...");
+            localStorage.removeItem("user");
+            window.location.href = "../index.html";
+            return;
         }
-
-        const user = JSON.parse(userRaw);
-
-        if (!user.username || !user.role) {
-            throw new Error("Datos incompletos");
-        }
-
-        if (category) {
-            loadVideos(category, user); // Pasamos el usuario para verificar permisos
-        }
-    } catch (error) {
-        console.warn("Usuario no válido. Redirigiendo al login...");
-        localStorage.removeItem("user");
-        window.location.href = "../index.html";
-        return;
     }
 
-    // Crear usuarios si no existen
+    // Crear usuarios solo si no existen
     if (!localStorage.getItem("users")) {
         const users = [
             { username: "admin", password: "admin123", role: "admin" },
@@ -42,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("users", JSON.stringify(users));
     }
 });
+
 
 // Cargar videos
 function loadVideos(category, user) {
