@@ -1,3 +1,17 @@
+// Validar el user antes de que todo inicie
+try {
+    const userRaw = localStorage.getItem("user");
+    if (userRaw) {
+        const parsedUser = JSON.parse(userRaw);
+        if (!parsedUser.username || !parsedUser.role) {
+            throw new Error("JSON incompleto");
+        }
+    }
+} catch (e) {
+    console.warn("⚠️ Usuario corrupto en localStorage. Reiniciando...");
+    localStorage.removeItem("user");
+    location.href = "index.html"; // Redirige al login
+}
 document.addEventListener("DOMContentLoaded", function () {
     const path = window.location.pathname;
     let category = "";
