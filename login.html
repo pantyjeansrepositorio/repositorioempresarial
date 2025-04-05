@@ -15,30 +15,8 @@
         <p id="error-message" class="error-message"></p>
     </div>
 
-    <script>
-        function login() {
-            let username = document.getElementById("username").value.trim();
-            let password = document.getElementById("password").value.trim();
-            let errorMessage = document.getElementById("error-message");
-
-            // Simulación de usuarios almacenados en localStorage
-            const users = {
-                "admin": "panty2025",
-                "usuario1": "abcd",
-                "empleado": "empleado123"
-            };
-
-            if (users[username] && users[username] === password) {
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("user", username);
-                window.location.href = "index.html"; // Redirige al inicio
-            } else {
-                errorMessage.textContent = "Usuario o contraseña incorrectos.";
-                errorMessage.style.color = "red";
-            }
-        }
-    </script>
+    <!-- Usa tu archivo auth.js aquí -->
+    <script src="js/auth.js"></script>
 </body>
 </html>
-
 
