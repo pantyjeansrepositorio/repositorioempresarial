@@ -8,27 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
         category = "salud-mental";
     }
 
-    // 🔒 Verificar y limpiar el JSON de usuario antes de todo
-    const userRaw = localStorage.getItem("user");
-    let user = null;
-
-    try {
-        if (!userRaw) throw new Error("No hay usuario");
-        user = JSON.parse(userRaw);
-        if (!user.username || !user.role) throw new Error("Usuario mal estructurado");
-    } catch (error) {
-        console.warn("Usuario inválido en localStorage. Redirigiendo al login...");
-        localStorage.removeItem("user");
-        window.location.href = "../index.html";
-        return;
-    }
-
-    // 🔄 Cargar videos solo si la categoría es válida
     if (category) {
-        loadVideos(category, user);
+        loadVideos(category);
     }
 
-    // 🧩 Crear usuarios por defecto si no existen
+    // Cargar usuarios desde localStorage si no existen
     if (!localStorage.getItem("users")) {
         const users = [
             { username: "admin", password: "admin123", role: "admin" },
@@ -40,22 +24,25 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // 🔹 Cargar videos
-function loadVideos(category, user) {
+function loadVideos(category) {
     const videoContainer = document.getElementById("videos");
     if (!videoContainer) return;
 
     videoContainer.innerHTML = ""; // Limpiar contenido previo
     let videos = JSON.parse(localStorage.getItem(category)) || [];
+    const user = JSON.parse(localStorage.getItem("user"));
 
     videos.forEach((video, index) => {
         const videoWrapper = document.createElement("div");
         videoWrapper.classList.add("video-wrapper");
 
+        // 🔹 Título del video
         const videoTitle = document.createElement("p");
         videoTitle.textContent = video.name ? video.name : "Sin título";
         videoTitle.classList.add("video-title");
-        videoTitle.style.color = "black";
+        videoTitle.style.color = "black"; // Asegurar que sea visible
 
+        // 🔹 Verificar si es un video de YouTube o archivo local
         let videoElement;
         if (video.url.includes("youtube.com") || video.url.includes("youtu.be")) {
             videoElement = document.createElement("iframe");
@@ -64,6 +51,7 @@ function loadVideos(category, user) {
             videoElement.height = 200;
             videoElement.allowFullscreen = true;
 
+            // Obtener título real de YouTube
             getYouTubeTitle(video.url, (title) => {
                 videoTitle.textContent = title || "Video de YouTube";
             });
@@ -74,6 +62,7 @@ function loadVideos(category, user) {
             videoElement.width = 300;
         }
 
+        // 🔹 Botón de eliminar (solo para admin)
         if (user && user.role === "admin") {
             const deleteButton = document.createElement("button");
             deleteButton.innerHTML = "🗑 Eliminar";
@@ -103,7 +92,7 @@ function getYouTubeTitle(url, callback) {
         return;
     }
 
-    fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
+    fetch(https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId})
         .then(response => response.json())
         .then(data => {
             callback(data.title);
@@ -113,7 +102,7 @@ function getYouTubeTitle(url, callback) {
         });
 }
 
-// 🔹 Extraer ID de video de YouTube
+// 🔹 Extraer el ID del video de YouTube
 function extractYouTubeID(url) {
     const regExp = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*vi=))([^?&]+)/;
     const match = url.match(regExp);
@@ -154,23 +143,20 @@ function uploadVideo(category) {
     youtubeInput.value = "";
 }
 
-// 🔹 Guardar video
+// 🔹 Guardar videos en localStorage
 function saveVideo(category, url, name) {
     let videos = JSON.parse(localStorage.getItem(category)) || [];
     videos.push({ url: url, name: name });
     localStorage.setItem(category, JSON.stringify(videos));
-    const user = JSON.parse(localStorage.getItem("user"));
-    loadVideos(category, user);
+    loadVideos(category);
 }
 
-// 🔹 Eliminar video
+// 🔹 Eliminar videos
 function deleteVideo(category, index) {
     let videos = JSON.parse(localStorage.getItem(category)) || [];
     if (index >= 0 && index < videos.length) {
         videos.splice(index, 1);
         localStorage.setItem(category, JSON.stringify(videos));
-        const user = JSON.parse(localStorage.getItem("user"));
-        loadVideos(category, user);
+        loadVideos(category);
     }
 }
-
