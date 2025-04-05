@@ -1,6 +1,6 @@
 // Usuarios con permisos
 const users = {
-    "admin": { password: "1234", role: "admin" }, // Puede subir archivos
+    "admin": { password: "Panty2025", role: "admin" }, // Puede subir archivos
     "empleado": { password: "empleado123", role: "viewer" } // Solo puede visualizar
 };
 
@@ -24,6 +24,7 @@ function checkAuth() {
         window.location.href = "login.html"; // Si no está autenticado, redirigir a login
     }
 }
+
 function logout() {
     localStorage.removeItem("user"); // Eliminar usuario de sesión
     setTimeout(() => {
@@ -31,5 +32,5 @@ function logout() {
     }, 500);
 }
 
-
 // Llamamos a esta función en cada página donde se necesite autenticación
+
