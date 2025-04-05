@@ -1,6 +1,6 @@
 // Usuarios con permisos
 const users = {
-    "admin": { password: "panty2025", role: "admin" }, // Puede subir archivos
+    "admin": { password: "1234", role: "admin" }, // Puede subir archivos
     "empleado": { password: "empleado123", role: "viewer" } // Solo puede visualizar
 };
 
