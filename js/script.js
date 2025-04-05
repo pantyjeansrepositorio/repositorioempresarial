@@ -8,27 +8,31 @@ document.addEventListener("DOMContentLoaded", function () {
         category = "salud-mental";
     }
 
-    // 🔒 Verificar y limpiar el JSON de usuario antes de todo
-    const userRaw = localStorage.getItem("user");
-    let user = null;
-
+    // ✅ Validar JSON válido en el localStorage antes de parsear
     try {
-        if (!userRaw) throw new Error("No hay usuario");
-        user = JSON.parse(userRaw);
-        if (!user.username || !user.role) throw new Error("Usuario mal estructurado");
+        const userRaw = localStorage.getItem("user");
+
+        if (!userRaw || userRaw[0] !== "{") {
+            throw new Error("Formato inválido");
+        }
+
+        const user = JSON.parse(userRaw);
+
+        if (!user.username || !user.role) {
+            throw new Error("Datos incompletos");
+        }
+
+        if (category) {
+            loadVideos(category, user); // Pasamos el usuario para verificar permisos
+        }
     } catch (error) {
-        console.warn("Usuario inválido en localStorage. Redirigiendo al login...");
+        console.warn("Usuario no válido. Redirigiendo al login...");
         localStorage.removeItem("user");
         window.location.href = "../index.html";
         return;
     }
 
-    // 🔄 Cargar videos solo si la categoría es válida
-    if (category) {
-        loadVideos(category, user);
-    }
-
-    // 🧩 Crear usuarios por defecto si no existen
+    // Crear usuarios si no existen
     if (!localStorage.getItem("users")) {
         const users = [
             { username: "admin", password: "admin123", role: "admin" },
@@ -39,12 +43,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// 🔹 Cargar videos
+// Cargar videos
 function loadVideos(category, user) {
     const videoContainer = document.getElementById("videos");
     if (!videoContainer) return;
 
-    videoContainer.innerHTML = ""; // Limpiar contenido previo
+    videoContainer.innerHTML = "";
     let videos = JSON.parse(localStorage.getItem(category)) || [];
 
     videos.forEach((video, index) => {
@@ -52,7 +56,7 @@ function loadVideos(category, user) {
         videoWrapper.classList.add("video-wrapper");
 
         const videoTitle = document.createElement("p");
-        videoTitle.textContent = video.name ? video.name : "Sin título";
+        videoTitle.textContent = video.name || "Sin título";
         videoTitle.classList.add("video-title");
         videoTitle.style.color = "black";
 
@@ -95,7 +99,6 @@ function loadVideos(category, user) {
     });
 }
 
-// 🔹 Obtener título real de YouTube
 function getYouTubeTitle(url, callback) {
     const videoId = extractYouTubeID(url);
     if (!videoId) {
@@ -113,14 +116,12 @@ function getYouTubeTitle(url, callback) {
         });
 }
 
-// 🔹 Extraer ID de video de YouTube
 function extractYouTubeID(url) {
     const regExp = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*vi=))([^?&]+)/;
     const match = url.match(regExp);
     return match ? match[1] : null;
 }
 
-// 🔹 Subir videos
 function uploadVideo(category) {
     const fileInput = document.getElementById("videoUpload");
     const youtubeInput = document.getElementById("youtubeUrl");
@@ -154,7 +155,6 @@ function uploadVideo(category) {
     youtubeInput.value = "";
 }
 
-// 🔹 Guardar video
 function saveVideo(category, url, name) {
     let videos = JSON.parse(localStorage.getItem(category)) || [];
     videos.push({ url: url, name: name });
@@ -163,7 +163,6 @@ function saveVideo(category, url, name) {
     loadVideos(category, user);
 }
 
-// 🔹 Eliminar video
 function deleteVideo(category, index) {
     let videos = JSON.parse(localStorage.getItem(category)) || [];
     if (index >= 0 && index < videos.length) {
@@ -173,5 +172,4 @@ function deleteVideo(category, index) {
         loadVideos(category, user);
     }
 }
-
 
