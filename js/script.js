@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadVideos(category);
     }
 
-    // Cargar usuarios desde localStorage si no existen
+    // Cargar usuarios si no existen
     if (!localStorage.getItem("users")) {
         const users = [
             { username: "admin", password: "admin123", role: "admin" },
@@ -20,6 +20,18 @@ document.addEventListener("DOMContentLoaded", function () {
             { username: "empleado2", password: "empleado123", role: "viewer" }
         ];
         localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    // Mostrar botones de login rápido si no hay sesión
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!user.username) {
+        const loginContainer = document.createElement("div");
+        loginContainer.id = "quick-login";
+        loginContainer.innerHTML = `
+            <button onclick="loginAs('admin')">Ingresar como Admin</button>
+            <button onclick="loginAs('empleado1')">Ingresar como Empleado</button>
+        `;
+        document.body.insertBefore(loginContainer, document.body.firstChild);
     }
 });
 
@@ -30,7 +42,7 @@ function loadVideos(category) {
 
     videoContainer.innerHTML = ""; // Limpiar contenido previo
     let videos = JSON.parse(localStorage.getItem(category)) || [];
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
 
     videos.forEach((video, index) => {
         const videoWrapper = document.createElement("div");
@@ -40,9 +52,9 @@ function loadVideos(category) {
         const videoTitle = document.createElement("p");
         videoTitle.textContent = video.name ? video.name : "Sin título";
         videoTitle.classList.add("video-title");
-        videoTitle.style.color = "black"; // Asegurar que sea visible
+        videoTitle.style.color = "black";
 
-        // 🔹 Verificar si es un video de YouTube o archivo local
+        // 🔹 YouTube o archivo local
         let videoElement;
         if (video.url.includes("youtube.com") || video.url.includes("youtu.be")) {
             videoElement = document.createElement("iframe");
@@ -51,7 +63,6 @@ function loadVideos(category) {
             videoElement.height = 200;
             videoElement.allowFullscreen = true;
 
-            // Obtener título real de YouTube
             getYouTubeTitle(video.url, (title) => {
                 videoTitle.textContent = title || "Video de YouTube";
             });
@@ -62,7 +73,7 @@ function loadVideos(category) {
             videoElement.width = 300;
         }
 
-        // 🔹 Botón de eliminar (solo para admin)
+        // 🔹 Botón eliminar si es admin
         if (user && user.role === "admin") {
             const deleteButton = document.createElement("button");
             deleteButton.innerHTML = "🗑 Eliminar";
@@ -84,7 +95,7 @@ function loadVideos(category) {
     });
 }
 
-// 🔹 Obtener título real de YouTube
+// 🔹 Obtener título de YouTube
 function getYouTubeTitle(url, callback) {
     const videoId = extractYouTubeID(url);
     if (!videoId) {
@@ -102,7 +113,7 @@ function getYouTubeTitle(url, callback) {
         });
 }
 
-// 🔹 Extraer el ID del video de YouTube
+// 🔹 Extraer ID de YouTube
 function extractYouTubeID(url) {
     const regExp = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*vi=))([^?&]+)/;
     const match = url.match(regExp);
@@ -143,7 +154,7 @@ function uploadVideo(category) {
     youtubeInput.value = "";
 }
 
-// 🔹 Guardar videos en localStorage
+// 🔹 Guardar en localStorage
 function saveVideo(category, url, name) {
     let videos = JSON.parse(localStorage.getItem(category)) || [];
     videos.push({ url: url, name: name });
@@ -151,13 +162,26 @@ function saveVideo(category, url, name) {
     loadVideos(category);
 }
 
-// 🔹 Eliminar videos
+// 🔹 Eliminar video
 function deleteVideo(category, index) {
     let videos = JSON.parse(localStorage.getItem(category)) || [];
     if (index >= 0 && index < videos.length) {
         videos.splice(index, 1);
         localStorage.setItem(category, JSON.stringify(videos));
         loadVideos(category);
+    }
+}
+
+// 🔹 Función para login rápido
+function loginAs(username) {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const user = users.find(u => u.username === username);
+
+    if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        location.reload();
+    } else {
+        alert("Usuario no encontrado");
     }
 }
 
