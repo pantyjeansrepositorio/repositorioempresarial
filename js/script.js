@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
      // Cargar usuarios desde localStorage si no existen
      if (!localStorage.getItem("users")) {
          const users = [
-             { username: "admin", password: "1234", role: "admin" },
+             { username: "admin", password: "Panty2025", role: "admin" },
              { username: "empleado1", password: "empleado123", role: "viewer" },
              { username: "empleado2", password: "empleado123", role: "viewer" }
          ];
