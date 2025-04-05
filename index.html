@@ -147,22 +147,20 @@
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let authButton = document.getElementById("auth-button");
-            let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+       document.addEventListener("DOMContentLoaded", function () {
+    let authButton = document.getElementById("auth-button");
+    let user = JSON.parse(localStorage.getItem("user"));
 
-            authButton.textContent = isLoggedIn ? "Cerrar sesión" : "Iniciar sesión";
+    authButton.textContent = user ? "Cerrar sesión" : "Iniciar sesión";
 
-            function handleAuth() {
-                if (isLoggedIn) {
-                    localStorage.setItem("isLoggedIn", "false");
-                    window.location.href = "login.html";
-                } else {
-                    window.location.href = "login.html";
-                }
-            }
-            authButton.onclick = handleAuth;
-        });
+    authButton.onclick = function () {
+        if (user) {
+            localStorage.removeItem("user");
+        }
+        window.location.href = "login.html";
+    };
+});
+
     </script>
 </body>
 </html>
