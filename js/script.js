@@ -1,32 +1,34 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const path = window.location.pathname.toLowerCase();
+    const path = window.location.pathname;
     let category = "";
 
-    // ✅ Detectar categoría según la ruta
     if (path.includes("mejora-continua.html")) {
         category = "mejora-continua";
     } else if (path.includes("salud-mental.html")) {
         category = "salud-mental";
     }
 
-    // ✅ Validar usuario guardado en localStorage
+    // 🔒 Verificar y limpiar el JSON de usuario antes de todo
+    const userRaw = localStorage.getItem("user");
     let user = null;
+
     try {
-        const userRaw = localStorage.getItem("user");
-        if (userRaw) {
-            user = JSON.parse(userRaw);
-            if (!user.username || !user.role) throw new Error();
-        } else {
-            throw new Error();
-        }
+        if (!userRaw) throw new Error("No hay usuario");
+        user = JSON.parse(userRaw);
+        if (!user.username || !user.role) throw new Error("Usuario mal estructurado");
     } catch (error) {
-        console.warn("Usuario inválido o no autenticado. Redirigiendo...");
+        console.warn("Usuario inválido en localStorage. Redirigiendo al login...");
         localStorage.removeItem("user");
-        window.location.href = "../login.html";
+        window.location.href = "../index.html";
         return;
     }
 
-    // ✅ Crear usuarios si no existen
+    // 🔄 Cargar videos solo si la categoría es válida
+    if (category) {
+        loadVideos(category, user);
+    }
+
+    // 🧩 Crear usuarios por defecto si no existen
     if (!localStorage.getItem("users")) {
         const users = [
             { username: "admin", password: "admin123", role: "admin" },
@@ -35,131 +37,140 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
         localStorage.setItem("users", JSON.stringify(users));
     }
-
-    // ✅ Cargar videos si estamos en una categoría
-    if (category) {
-        loadVideos(category, user);
-    }
 });
 
-// ✅ Cargar videos de la categoría
+// 🔹 Cargar videos
 function loadVideos(category, user) {
-    const container = document.getElementById("videos");
-    if (!container) return;
+    const videoContainer = document.getElementById("videos");
+    if (!videoContainer) return;
 
-    container.innerHTML = "";
+    videoContainer.innerHTML = ""; // Limpiar contenido previo
     let videos = JSON.parse(localStorage.getItem(category)) || [];
 
     videos.forEach((video, index) => {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("video-wrapper");
+        const videoWrapper = document.createElement("div");
+        videoWrapper.classList.add("video-wrapper");
 
-        const title = document.createElement("p");
-        title.classList.add("video-title");
-        title.style.color = "black";
-        title.textContent = video.name || "Sin título";
+        const videoTitle = document.createElement("p");
+        videoTitle.textContent = video.name ? video.name : "Sin título";
+        videoTitle.classList.add("video-title");
+        videoTitle.style.color = "black";
 
-        let element;
+        let videoElement;
         if (video.url.includes("youtube.com") || video.url.includes("youtu.be")) {
-            element = document.createElement("iframe");
-            element.src = video.url;
-            element.width = 300;
-            element.height = 200;
-            element.allowFullscreen = true;
+            videoElement = document.createElement("iframe");
+            videoElement.src = video.url;
+            videoElement.width = 300;
+            videoElement.height = 200;
+            videoElement.allowFullscreen = true;
 
-            getYouTubeTitle(video.url, (ytTitle) => {
-                title.textContent = ytTitle || "Video de YouTube";
+            getYouTubeTitle(video.url, (title) => {
+                videoTitle.textContent = title || "Video de YouTube";
             });
         } else {
-            element = document.createElement("video");
-            element.src = video.url;
-            element.width = 300;
-            element.controls = true;
+            videoElement = document.createElement("video");
+            videoElement.src = video.url;
+            videoElement.controls = true;
+            videoElement.width = 300;
         }
 
-        // ✅ Botón eliminar solo si es admin
-        if (user.role === "admin") {
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "🗑 Eliminar";
-            deleteBtn.classList.add("delete-button");
-            deleteBtn.style.background = "red";
-            deleteBtn.style.color = "white";
-            deleteBtn.style.marginLeft = "10px";
-            deleteBtn.style.cursor = "pointer";
-            deleteBtn.onclick = function () {
+        if (user && user.role === "admin") {
+            const deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "🗑 Eliminar";
+            deleteButton.classList.add("delete-button");
+            deleteButton.style.background = "red";
+            deleteButton.style.color = "white";
+            deleteButton.style.marginLeft = "10px";
+            deleteButton.style.border = "none";
+            deleteButton.style.cursor = "pointer";
+            deleteButton.onclick = function () {
                 deleteVideo(category, index);
             };
-            wrapper.appendChild(deleteBtn);
+            videoWrapper.appendChild(deleteButton);
         }
 
-        wrapper.appendChild(title);
-        wrapper.appendChild(element);
-        container.appendChild(wrapper);
+        videoWrapper.appendChild(videoTitle);
+        videoWrapper.appendChild(videoElement);
+        videoContainer.appendChild(videoWrapper);
     });
 }
 
-// ✅ Obtener título de YouTube
+// 🔹 Obtener título real de YouTube
 function getYouTubeTitle(url, callback) {
-    const id = extractYouTubeID(url);
-    if (!id) return callback("Video de YouTube");
+    const videoId = extractYouTubeID(url);
+    if (!videoId) {
+        callback("Video de YouTube");
+        return;
+    }
 
-    fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}`)
-        .then(res => res.json())
-        .then(data => callback(data.title))
-        .catch(() => callback("Video de YouTube"));
+    fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
+        .then(response => response.json())
+        .then(data => {
+            callback(data.title);
+        })
+        .catch(() => {
+            callback("Video de YouTube");
+        });
 }
 
-// ✅ Extraer ID de YouTube
+// 🔹 Extraer ID de video de YouTube
 function extractYouTubeID(url) {
-    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*vi=))([^?&]+)/);
+    const regExp = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*vi=))([^?&]+)/;
+    const match = url.match(regExp);
     return match ? match[1] : null;
 }
 
-// ✅ Subir video
+// 🔹 Subir videos
 function uploadVideo(category) {
     const fileInput = document.getElementById("videoUpload");
     const youtubeInput = document.getElementById("youtubeUrl");
 
     if (!fileInput.files.length && !youtubeInput.value) {
-        alert("Selecciona un archivo o pega un enlace de YouTube.");
+        alert("Por favor, selecciona un archivo o ingresa un enlace de YouTube.");
         return;
     }
 
+    let fileName = "Sin título";
+    let videoUrl = "";
+
     if (fileInput.files.length) {
         const file = fileInput.files[0];
+        fileName = file.name;
         const reader = new FileReader();
 
-        reader.onload = function (e) {
-            saveVideo(category, e.target.result, file.name);
+        reader.onload = function (event) {
+            videoUrl = event.target.result;
+            saveVideo(category, videoUrl, fileName);
         };
 
         reader.readAsDataURL(file);
     } else {
-        const url = youtubeInput.value;
-        getYouTubeTitle(url, (title) => {
-            saveVideo(category, url, title);
+        videoUrl = youtubeInput.value;
+        getYouTubeTitle(videoUrl, (title) => {
+            saveVideo(category, videoUrl, title);
         });
     }
 
     youtubeInput.value = "";
 }
 
-// ✅ Guardar video
+// 🔹 Guardar video
 function saveVideo(category, url, name) {
     let videos = JSON.parse(localStorage.getItem(category)) || [];
-    videos.push({ url, name });
+    videos.push({ url: url, name: name });
     localStorage.setItem(category, JSON.stringify(videos));
     const user = JSON.parse(localStorage.getItem("user"));
     loadVideos(category, user);
 }
 
-// ✅ Eliminar video
+// 🔹 Eliminar video
 function deleteVideo(category, index) {
     let videos = JSON.parse(localStorage.getItem(category)) || [];
-    if (index >= 0) {
+    if (index >= 0 && index < videos.length) {
         videos.splice(index, 1);
         localStorage.setItem(category, JSON.stringify(videos));
         const user = JSON.parse(localStorage.getItem("user"));
         loadVideos(category, user);
     }
 }
+
